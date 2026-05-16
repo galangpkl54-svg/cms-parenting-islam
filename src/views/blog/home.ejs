@@ -1,0 +1,160 @@
+<section class="space-y-8 lg:space-y-10">
+  <section class="blog-home-hero wp-panel-strong overflow-hidden">
+    <div class="blog-home-hero__grid p-6 sm:p-8 lg:p-10">
+      <div class="blog-home-hero__content space-y-6">
+        <div class="blog-home-hero__eyebrow flex flex-wrap items-center gap-3">
+          <span class="blog-eyebrow">Parenting Islam</span>
+          <span class="blog-soft-chip">Rumah baca keluarga muslim</span>
+        </div>
+
+        <div class="blog-home-hero__intro max-w-3xl space-y-4">
+          <h1 class="blog-home-title">Panduan parenting islami yang menenangkan, relevan, dan terasa dekat dengan kehidupan keluarga sehari-hari.</h1>
+          <p class="blog-home-copy">
+            Bacaan seputar pengasuhan, adab anak, relasi keluarga, dan inspirasi rumah tangga muslim dalam tampilan
+            editorial yang lebih elegan, hangat, dan nyaman dibaca.
+          </p>
+        </div>
+
+        <div class="blog-home-hero__actions flex flex-wrap gap-3">
+          <a href="#artikel-terbaru" class="wp-btn wp-btn-primary">Jelajahi artikel</a>
+          <a href="/search" class="wp-btn wp-btn-secondary">Cari topik spesifik</a>
+        </div>
+
+        <div class="blog-home-stats">
+          <div class="blog-home-stat">
+            <span class="blog-home-stat__label">Artikel tayang</span>
+            <strong class="blog-home-stat__value"><%= total || 0 %></strong>
+          </div>
+          <div class="blog-home-stat">
+            <span class="blog-home-stat__label">Kategori</span>
+            <strong class="blog-home-stat__value"><%= Array.isArray(categories) ? categories.length : 0 %></strong>
+          </div>
+          <div class="blog-home-stat">
+            <span class="blog-home-stat__label">Tag pembahasan</span>
+            <strong class="blog-home-stat__value"><%= Array.isArray(tags) ? tags.length : 0 %></strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="blog-home-feature">
+        <div class="blog-home-quote">
+          <p class="blog-home-quote__kicker">Nilai Utama</p>
+          <p class="blog-home-quote__text">
+            “Mendampingi orang tua dengan bacaan yang lembut, terarah, dan selaras dengan nilai-nilai islami.”
+          </p>
+          <div class="blog-home-quote__chips">
+            <span class="blog-home-quote__chip">Adab</span>
+            <span class="blog-home-quote__chip">Amanah</span>
+            <span class="blog-home-quote__chip">Tumbuh Kembang</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="grid gap-8 xl:grid-cols-[minmax(0,1.7fr)_minmax(300px,0.8fr)]">
+    <div class="space-y-8">
+      <section id="artikel-terbaru" class="space-y-5">
+        <div class="flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <p class="blog-eyebrow">Artikel Terbaru</p>
+            <h2 class="mt-2 blog-section-title">Bacaan pilihan untuk mendampingi keluarga setiap hari</h2>
+          </div>
+          <p class="max-w-xl text-sm leading-7 text-[color:var(--wp-muted)]">
+            Daftar artikel disusun tetap sama seperti sebelumnya, hanya tampilannya yang diperbarui agar lebih selaras
+            dengan nuansa parenting islami.
+          </p>
+        </div>
+
+        <div class="grid gap-5 md:grid-cols-2">
+          <% if (typeof posts !== "undefined" && posts && posts.length) { %>
+            <% posts.forEach((post, index) => { %>
+              <article class="blog-story-card group h-full">
+                <a href="/posts/<%= post.slug %>" class="blog-story-card__media">
+                  <% if (post.featuredImage) { %>
+                    <img src="<%= post.featuredImage %>" alt="<%= post.title %>" loading="<%= index === 0 ? 'eager' : 'lazy' %>" />
+                  <% } else { %>
+                    <div class="blog-story-card__placeholder">
+                      <span class="blog-story-card__placeholder-mark">Bismillah</span>
+                    </div>
+                  <% } %>
+                </a>
+
+                <div class="blog-story-card__body">
+                  <div class="flex flex-wrap items-center gap-2">
+                    <span class="blog-soft-chip">Artikel</span>
+                    <span class="blog-meta-inline"><%= post.readingTime || "2" %> menit baca</span>
+                  </div>
+
+                  <h3 class="blog-story-card__title">
+                    <a href="/posts/<%= post.slug %>"><%= post.title %></a>
+                  </h3>
+
+                  <p class="blog-story-card__excerpt">
+                    <%= post.subheadline || post.excerpt || (post.content ? post.content.replace(/<[^>]*>/g, "").slice(0, 160) : "Tidak ada ringkasan tersedia.") %>
+                  </p>
+
+                  <div class="blog-story-card__meta">
+                    <span><%= post.viewCount || 0 %> views</span>
+                    <span>Baca artikel</span>
+                  </div>
+                </div>
+              </article>
+            <% }) %>
+          <% } else { %>
+            <div class="md:col-span-2 rounded-[2rem] border border-dashed border-[color:var(--wp-border)] bg-[color:var(--wp-surface)] p-8 text-sm leading-7 text-[color:var(--wp-muted)]">
+              Belum ada artikel. Silakan login ke dashboard untuk menulis konten pertama.
+            </div>
+          <% } %>
+        </div>
+
+        <%- include("../partials/pagination", { pagination }) %>
+      </section>
+    </div>
+
+    <aside class="space-y-6">
+      <section class="blog-side-panel wp-panel">
+        <div class="space-y-3 p-6">
+          <p class="blog-eyebrow">Kategori</p>
+          <h2 class="blog-side-title">Tema pengasuhan dan rumah tangga</h2>
+          <div class="flex flex-wrap gap-2.5">
+            <% if (typeof categories !== "undefined" && categories && categories.length) { %>
+              <% categories.forEach((category) => { %>
+                <a href="/categories/<%= category.slug %>" class="blog-taxonomy-pill"><%= category.name %></a>
+              <% }) %>
+            <% } else { %>
+              <span class="blog-taxonomy-pill is-muted">Tidak ada kategori</span>
+            <% } %>
+          </div>
+        </div>
+      </section>
+
+      <section class="blog-side-panel wp-panel">
+        <div class="space-y-3 p-6">
+          <p class="blog-eyebrow">Tag Populer</p>
+          <h2 class="blog-side-title">Kata kunci yang sering dicari pembaca</h2>
+          <div class="flex flex-wrap gap-2.5">
+            <% if (typeof tags !== "undefined" && tags && tags.length) { %>
+              <% tags.forEach((tag) => { %>
+                <a href="/tags/<%= tag.slug %>" class="blog-taxonomy-pill">#<%= tag.name %></a>
+              <% }) %>
+            <% } else { %>
+              <span class="blog-taxonomy-pill is-muted">Belum ada tag</span>
+            <% } %>
+          </div>
+        </div>
+      </section>
+
+      <section class="blog-side-panel wp-panel-strong overflow-hidden">
+        <div class="p-6">
+          <p class="blog-eyebrow">Nilai Utama</p>
+          <h2 class="blog-side-title mt-2">Tampilan baru yang tetap menjaga fungsi lama.</h2>
+          <p class="mt-3 text-sm leading-7 text-[color:var(--wp-muted)]">
+            Rute artikel, pencarian, komentar, kategori, tag, dan pagination tetap berjalan seperti sebelumnya. Yang
+            berubah hanya pengalaman visualnya.
+          </p>
+        </div>
+      </section>
+    </aside>
+  </section>
+</section>

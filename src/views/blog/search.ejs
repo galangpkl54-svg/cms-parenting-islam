@@ -1,0 +1,49 @@
+<section class="space-y-6">
+  <div class="blog-search-hero wp-panel-strong overflow-hidden">
+    <div class="p-6 sm:p-8">
+      <p class="blog-eyebrow">Search</p>
+      <h1 class="mt-3 blog-section-title">Hasil pencarian: <%= q || "-" %></h1>
+      <p class="mt-3 max-w-2xl text-sm leading-7 text-[color:var(--wp-muted)]"><%= total %> artikel ditemukan</p>
+    </div>
+  </div>
+
+  <div class="blog-archive-grid sm:grid-cols-2 xl:grid-cols-3">
+    <% if (posts.length) { %>
+      <% posts.forEach((post) => { %>
+        <article class="blog-archive-card group h-full transition-all duration-200 hover:-translate-y-1">
+          <a href="/posts/<%= post.slug %>" class="block">
+            <div class="aspect-[16/10] overflow-hidden bg-[color:var(--wp-surface-2)]">
+              <% if (post.featuredImage) { %>
+                <img src="<%= post.featuredImage %>" alt="<%= post.title %>" class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy" />
+              <% } else { %>
+                <div class="flex h-full w-full items-center justify-center bg-gradient-to-br from-[rgba(207,182,136,0.55)] to-[rgba(63,122,99,0.4)] text-white/80">
+                  <span class="font-display text-4xl">B</span>
+                </div>
+              <% } %>
+            </div>
+          </a>
+          <div class="blog-archive-card__content">
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="blog-soft-chip">Hasil pencarian</span>
+              <span class="blog-meta-inline"><%= post.readingTime || "2" %> menit baca</span>
+            </div>
+            <h2 class="mt-4 blog-archive-card__title text-slate-950 transition-colors group-hover:text-brand-600 dark:text-white">
+              <a href="/posts/<%= post.slug %>"><%= post.title %></a>
+            </h2>
+            <p class="mt-3 line-clamp-3 text-sm leading-7 text-[color:var(--wp-muted)]"><%= post.subheadline || post.excerpt || '' %></p>
+            <div class="mt-4 flex flex-wrap items-center gap-3 text-xs uppercase tracking-[0.16em] text-[color:var(--wp-muted)]">
+              <span><%= post.viewCount || 0 %> views</span>
+              <span>Buka artikel</span>
+            </div>
+          </div>
+        </article>
+      <% }) %>
+    <% } else { %>
+      <div class="sm:col-span-2 xl:col-span-3 rounded-3xl border border-dashed border-[color:var(--wp-border)] bg-[color:var(--wp-surface-2)] p-8 text-sm text-slate-500 dark:text-slate-400">
+        Tidak ada artikel yang cocok dengan kata kunci ini.
+      </div>
+    <% } %>
+  </div>
+
+  <%- include('../partials/pagination', { pagination }) %>
+</section>
