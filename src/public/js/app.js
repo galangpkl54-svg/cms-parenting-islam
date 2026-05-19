@@ -18,6 +18,66 @@ document.addEventListener("DOMContentLoaded", () => {
       .replace(/"/g, "&quot;")
       .replace(/'/g, "&#39;");
   const escapeSelectorValue = (value) => String(value ?? "").replace(/["\\]/g, "\\$&");
+  const appendRelValue = (currentValue, nextValue) => {
+    const tokens = String(currentValue || "")
+      .split(/\s+/)
+      .filter(Boolean);
+
+    if (!tokens.includes(nextValue)) {
+      tokens.push(nextValue);
+    }
+
+    return tokens.join(" ");
+  };
+  const shouldOpenBlogLinkInNewTab = (anchor) => {
+    if (!(anchor instanceof HTMLAnchorElement)) {
+      return false;
+    }
+
+    if (anchor.hasAttribute("target") || anchor.hasAttribute("download")) {
+      return false;
+    }
+
+    const rawHref = String(anchor.getAttribute("href") || "").trim();
+    if (!rawHref || rawHref.startsWith("#")) {
+      return false;
+    }
+
+    if (/^(mailto:|tel:|javascript:)/i.test(rawHref)) {
+      return false;
+    }
+
+    try {
+      const url = new URL(rawHref, window.location.href);
+      if (url.origin !== window.location.origin) {
+        return false;
+      }
+
+      if (url.pathname === window.location.pathname && url.hash) {
+        return false;
+      }
+
+      return true;
+    } catch {
+      return false;
+    }
+  };
+  const enableBlogNewTabNavigation = () => {
+    if (!document.body?.classList.contains("blog-theme")) {
+      return;
+    }
+
+    const links = document.querySelectorAll("header a[href], main a[href], footer a[href]");
+    links.forEach((link) => {
+      if (!shouldOpenBlogLinkInNewTab(link)) {
+        return;
+      }
+
+      link.setAttribute("target", "_blank");
+      link.setAttribute("rel", appendRelValue(link.getAttribute("rel"), "noopener"));
+      link.setAttribute("rel", appendRelValue(link.getAttribute("rel"), "noreferrer"));
+    });
+  };
   const formatBytes = (bytes) => {
     if (!Number.isFinite(bytes) || bytes <= 0) {
       return "0 B";
@@ -127,6 +187,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
   root.classList.remove("dark");
   root.style.colorScheme = "light";
+  enableBlogNewTabNavigation();
   const getFormDraftKey = (form) => {
     if (!(form instanceof HTMLFormElement)) {
       return "";
