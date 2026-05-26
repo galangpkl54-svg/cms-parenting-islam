@@ -10,14 +10,15 @@ import { tagController } from "../controllers/admin/tag.controller";
 import { profileController } from "../controllers/admin/profile.controller";
 import { uploadAvatar } from "../middlewares/upload.middleware";
 import { csrfProtection } from "../middlewares/csrf.middleware";
+import { authLimiter } from "../middlewares/rate-limit.middleware";
 
 export const router = Router();
 
 router.get("/", (_req, res) => res.redirect("/admin/dashboard"));
 router.get("/login", redirectIfAuth, authController.getLogin);
-router.post("/login", redirectIfAuth, authController.postLogin);
+router.post("/login", authLimiter, redirectIfAuth, authController.postLogin);
 router.get("/register", redirectIfAuth, authController.getRegister);
-router.post("/register", redirectIfAuth, authController.postRegister);
+router.post("/register", authLimiter, redirectIfAuth, authController.postRegister);
 router.post("/logout", authController.logout);
 router.get("/logout", authController.logout);
 

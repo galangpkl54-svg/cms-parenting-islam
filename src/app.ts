@@ -7,7 +7,7 @@ import expressLayouts = require("express-ejs-layouts");
 import { attachLocals, attachUser } from "./middlewares/auth.middleware";
 import { csrfProtection, exposeCsrfToken } from "./middlewares/csrf.middleware";
 import { errorHandler, notFound } from "./middlewares/error.middleware";
-import { authLimiter, publicLimiter } from "./middlewares/rate-limit.middleware";
+import { publicLimiter } from "./middlewares/rate-limit.middleware";
 import { router as adminRouter } from "./routes/admin.routes";
 import { router as blogRouter } from "./routes/blog.routes";
 import { router as seoRouter } from "./routes/seo.routes";
@@ -43,7 +43,7 @@ app.use(exposeCsrfToken);
 
 app.locals.appName = "CMS Blog";
 
-app.use("/admin", authLimiter, adminRouter);
+app.use("/admin", adminRouter);
 app.use("/", publicLimiter, blogRouter);
 app.use("/", seoRouter);
 

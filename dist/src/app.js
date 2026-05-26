@@ -43,7 +43,7 @@ exports.app.use((req, res, next) => {
 });
 exports.app.use(csrf_middleware_1.exposeCsrfToken);
 exports.app.locals.appName = "CMS Blog";
-exports.app.use("/admin", rate_limit_middleware_1.authLimiter, admin_routes_1.router);
+exports.app.use("/admin", admin_routes_1.router);
 exports.app.use("/", rate_limit_middleware_1.publicLimiter, blog_routes_1.router);
 exports.app.use("/", seo_routes_1.router);
 exports.app.get("/health", (_req, res) => {

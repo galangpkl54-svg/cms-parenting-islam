@@ -7,9 +7,10 @@ exports.publicLimiter = exports.authLimiter = void 0;
 const express_rate_limit_1 = __importDefault(require("express-rate-limit"));
 exports.authLimiter = (0, express_rate_limit_1.default)({
     windowMs: 15 * 60 * 1000,
-    limit: 30,
+    limit: 10,
     standardHeaders: true,
-    legacyHeaders: false
+    legacyHeaders: false,
+    skipSuccessfulRequests: true
 });
 exports.publicLimiter = (0, express_rate_limit_1.default)({
     windowMs: 15 * 60 * 1000,
